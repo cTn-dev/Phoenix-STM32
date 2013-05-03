@@ -1,8 +1,8 @@
-#include "board.h"
+#include "main.h"
+
 static void _putc(void *p, char c) {
     uartWrite(c);
 }
-
 
 void checkReflash() {
     uint32_t time, i = 0;

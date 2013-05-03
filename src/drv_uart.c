@@ -1,4 +1,4 @@
-#include "board.h"
+#include "main.h"
 
 /*
     DMA UART routines idea lifted from AutoQuad

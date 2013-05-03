@@ -29,7 +29,7 @@
  * OF SUCH DAMAGE.
  */
 
-#include "board.h"
+#include "main.h"
 #include "printf.h"
 
 #define PRINTF_LONG_SUPPORT

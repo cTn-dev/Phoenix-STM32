@@ -1,4 +1,4 @@
-#include "board.h"
+#include "main.h"
 
 typedef struct gpio_config_t {
     GPIO_TypeDef *gpio;
