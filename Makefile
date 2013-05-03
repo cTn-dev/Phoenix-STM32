@@ -36,7 +36,7 @@ COMMON_SRC   = startup_stm32f10x_md_gcc.S \
     drv_uart.c \
     printf.c \
     dataStorage.c \
-    pid.c \
+    pid.cpp \
     $(CMSIS_SRC) \
     $(STDPERIPH_SRC)
 
@@ -126,6 +126,11 @@ $(OBJECT_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@echo %% $(notdir $<)
 	@$(CC) -c -o $@ $(CFLAGS) $<
+    
+$(OBJECT_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	@echo %% $(notdir $<)
+	@$(CC) -c -o $@ $(CFLAGS) $<    
 
 # Assemble
 $(OBJECT_DIR)/%.o: %.s
