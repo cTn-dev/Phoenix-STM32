@@ -15,40 +15,41 @@
 TARGET = phoenix
 
 # Compile-time options
-OPTIONS	?=
+OPTIONS ?=
 
 # Debugger optons, must be empty or GDB
 DEBUG ?=
 
 # Working directories
-ROOT		  = $(dir $(lastword $(MAKEFILE_LIST)))
-SRC_DIR		  = $(ROOT)/src
-CMSIS_DIR	  = $(ROOT)/lib/CMSIS
+ROOT          = $(dir $(lastword $(MAKEFILE_LIST)))
+SRC_DIR       = $(ROOT)/src
+CMSIS_DIR     = $(ROOT)/lib/CMSIS
 STDPERIPH_DIR = $(ROOT)/lib/STM32F10x_StdPeriph_Driver
-OBJECT_DIR	  = $(ROOT)/obj
-BIN_DIR		  = $(ROOT)/obj
+OBJECT_DIR    = $(ROOT)/obj
+BIN_DIR       = $(ROOT)/obj
 
 # Source files common to all targets
-COMMON_SRC	 = startup_stm32f10x_md_gcc.S \
-		   main.c \
-		   drv_system.c \
-           drv_i2c.c \
-		   drv_uart.c \
-		   printf.c \
-           dataStorage.c \
-		   $(CMSIS_SRC) \
-		   $(STDPERIPH_SRC)
+COMMON_SRC   = startup_stm32f10x_md_gcc.S \
+    main.c \
+    drv_system.c \
+    drv_i2c.c \
+    drv_uart.c \
+    printf.c \
+    dataStorage.c \
+    pid.c \
+    $(CMSIS_SRC) \
+    $(STDPERIPH_SRC)
 
 # Search path for sources
-VPATH		:= $(SRC_DIR):$(SRC_DIR)/startups
+VPATH       := $(SRC_DIR):$(SRC_DIR)/startups
 
 # Search path and source files for the CMSIS sources
-VPATH		:= $(VPATH):$(CMSIS_DIR)/CM3/CoreSupport:$(CMSIS_DIR)/CM3/DeviceSupport/ST/STM32F10x
-CMSIS_SRC	 = $(notdir $(wildcard $(CMSIS_DIR)/CM3/CoreSupport/*.c \
-			               $(CMSIS_DIR)/CM3/DeviceSupport/ST/STM32F10x/*.c))
+VPATH       := $(VPATH):$(CMSIS_DIR)/CM3/CoreSupport:$(CMSIS_DIR)/CM3/DeviceSupport/ST/STM32F10x
+CMSIS_SRC    = $(notdir $(wildcard $(CMSIS_DIR)/CM3/CoreSupport/*.c \
+               $(CMSIS_DIR)/CM3/DeviceSupport/ST/STM32F10x/*.c))
 
 # Search path and source files for the ST stdperiph library
-VPATH		  := $(VPATH):$(STDPERIPH_DIR)/src
+VPATH         := $(VPATH):$(STDPERIPH_DIR)/src
 STDPERIPH_SRC  = $(notdir $(wildcard $(STDPERIPH_DIR)/src/*.c))
 
 ###############################################################################
@@ -56,38 +57,38 @@ STDPERIPH_SRC  = $(notdir $(wildcard $(STDPERIPH_DIR)/src/*.c))
 #
 
 # Tool names
-CC		 = arm-none-eabi-gcc
-OBJCOPY	 = arm-none-eabi-objcopy
+CC      = arm-none-eabi-gcc
+OBJCOPY = arm-none-eabi-objcopy
 
 #
 # Tool options.
 #
-INCLUDE_DIRS	 = $(SRC_DIR) \
-		   $(STDPERIPH_DIR)/inc \
-		   $(CMSIS_DIR)/CM3/CoreSupport \
-		   $(CMSIS_DIR)/CM3/DeviceSupport/ST/STM32F10x \
+INCLUDE_DIRS = $(SRC_DIR) \
+    $(STDPERIPH_DIR)/inc \
+    $(CMSIS_DIR)/CM3/CoreSupport \
+    $(CMSIS_DIR)/CM3/DeviceSupport/ST/STM32F10x \
 
-ARCH_FLAGS	 = -mthumb -mcpu=cortex-m3
-BASE_CFLAGS		 = $(ARCH_FLAGS) \
-		   $(addprefix -D,$(OPTIONS)) \
-		   $(addprefix -I,$(INCLUDE_DIRS)) \
-		   -Wall \
-		   -ffunction-sections \
-		   -fdata-sections \
-		   -DSTM32F10X_MD \
-		   -DUSE_STDPERIPH_DRIVER \
+ARCH_FLAGS  = -mthumb -mcpu=cortex-m3
+BASE_CFLAGS = $(ARCH_FLAGS) \
+    $(addprefix -D,$(OPTIONS)) \
+    $(addprefix -I,$(INCLUDE_DIRS)) \
+    -Wall \
+    -ffunction-sections \
+    -fdata-sections \
+    -DSTM32F10X_MD \
+    -DUSE_STDPERIPH_DRIVER \
 
-ASFLAGS		 = $(ARCH_FLAGS) \
-		   -x assembler-with-cpp \
-		   $(addprefix -I,$(INCLUDE_DIRS))
+ASFLAGS = $(ARCH_FLAGS) \
+    -x assembler-with-cpp \
+    $(addprefix -I,$(INCLUDE_DIRS))
 
 # XXX Map/crossref output?
-LD_SCRIPT	 = $(ROOT)/stm32_flash.ld
-LDFLAGS		 = -lm \
-		   $(ARCH_FLAGS) \
-		   -static \
-		   -Wl,-gc-sections \
-		   -T$(LD_SCRIPT)
+LD_SCRIPT = $(ROOT)/stm32_flash.ld
+LDFLAGS	= -lm \
+    $(ARCH_FLAGS) \
+    -static \
+    -Wl,-gc-sections \
+    -T$(LD_SCRIPT)
 
 ###############################################################################
 # No user-serviceable parts below
@@ -99,17 +100,17 @@ LDFLAGS		 = -lm \
 
 ifeq ($(DEBUG),GDB)
 CFLAGS = $(BASE_CFLAGS) \
-	-ggdb \
-	-O0
+    -ggdb \
+    -O0
 else
 CFLAGS = $(BASE_CFLAGS) \
-	-Os
+    -Os
 endif
 
 
-TARGET_HEX	 = $(BIN_DIR)/$(TARGET).hex
-TARGET_ELF	 = $(BIN_DIR)/$(TARGET).elf
-TARGET_OBJS	 = $(addsuffix .o,$(addprefix $(OBJECT_DIR)/,$(basename $(COMMON_SRC))))
+TARGET_HEX  = $(BIN_DIR)/$(TARGET).hex
+TARGET_ELF  = $(BIN_DIR)/$(TARGET).elf
+TARGET_OBJS = $(addsuffix .o,$(addprefix $(OBJECT_DIR)/,$(basename $(COMMON_SRC))))
 
 # List of buildable ELF files and their object dependencies.
 # It would be nice to compute these lists, but that seems to be just beyond make.
