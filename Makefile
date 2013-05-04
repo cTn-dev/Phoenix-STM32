@@ -32,8 +32,10 @@ BIN_DIR       = $(ROOT)/obj
 COMMON_SRC   = startup_stm32f10x_md_gcc.S \
     main.cpp \
     drv_system.c \
+    drv_i2c.c \
     drv_uart.c \
-    pid.cpp \
+    printf.c \
+    pid.cpp\
     $(CMSIS_SRC) \
     $(STDPERIPH_SRC)
 
@@ -74,6 +76,8 @@ BASE_CFLAGS = $(ARCH_FLAGS) \
     -fdata-sections \
     -DSTM32F10X_MD \
     -DUSE_STDPERIPH_DRIVER \
+    -fno-exceptions \
+    -Wno-write-strings \
 
 ASFLAGS = $(ARCH_FLAGS) \
     -x assembler-with-cpp \
