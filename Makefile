@@ -30,12 +30,10 @@ BIN_DIR       = $(ROOT)/obj
 
 # Source files common to all targets
 COMMON_SRC   = startup_stm32f10x_md_gcc.S \
-    main.c \
+    main.cpp \
     drv_system.c \
-    drv_i2c.c \
     drv_uart.c \
     printf.c \
-    dataStorage.c \
     pid.cpp \
     $(CMSIS_SRC) \
     $(STDPERIPH_SRC)

@@ -84,7 +84,7 @@ void systemInit(void) {
     SysTick_Config(SystemCoreClock / 1000);
 
     // Configure the rest of the stuff
-    i2cInit(I2C2);
+    //i2cInit(I2C2);
 
     // sleep for 100ms
     delay(100);

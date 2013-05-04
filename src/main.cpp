@@ -1,4 +1,6 @@
-#include "main.h"
+extern "C" {
+    #include "main.h"
+}    
 
 static void _putc(void *p, char c) {
     uartWrite(c);
@@ -52,7 +54,7 @@ int main(void) {
 
         while (uartAvailable()) {
             uint8_t c = uartRead();
-            printf("Got (%c)\r\n", c);
+            //printf("Got (%c)\r\n", c);
             
             if (c == 'R') {
                 systemReset(true); // reboot to bootloader

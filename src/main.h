@@ -67,5 +67,5 @@
 #define ZAXIS 2
 
 #include "drv_system.h" // timers, delays, etc
-#include "drv_i2c.h"
+//#include "drv_i2c.h"
 #include "drv_uart.h"
