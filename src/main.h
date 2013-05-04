@@ -13,7 +13,7 @@
 
 #include "stm32f10x_conf.h"
 #include "core_cm3.h"
-//#include "printf.h"
+#include "printf.h"
 
 #ifndef M_PI
 #define M_PI       3.14159265358979323846f
@@ -67,5 +67,5 @@
 #define ZAXIS 2
 
 #include "drv_system.h" // timers, delays, etc
-//#include "drv_i2c.h"
+#include "drv_i2c.h"
 #include "drv_uart.h"
