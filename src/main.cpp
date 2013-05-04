@@ -2,9 +2,11 @@ extern "C" {
     #include "main.h"
 }    
 
+/*
 static void _putc(void *p, char c) {
     uartWrite(c);
 }
+*/
 
 void checkReflash() {
     uint32_t time, i = 0;
@@ -29,7 +31,7 @@ void checkReflash() {
 
 int main(void) {
     systemInit();
-    init_printf(NULL, _putc);
+    //init_printf(NULL, _putc);
     uartInit(115200);
     delay(100);
     checkReflash(); // emergency reflash

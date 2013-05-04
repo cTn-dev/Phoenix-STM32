@@ -33,7 +33,6 @@ COMMON_SRC   = startup_stm32f10x_md_gcc.S \
     main.cpp \
     drv_system.c \
     drv_uart.c \
-    printf.c \
     pid.cpp \
     $(CMSIS_SRC) \
     $(STDPERIPH_SRC)
