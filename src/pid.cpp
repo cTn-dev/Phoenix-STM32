@@ -18,11 +18,7 @@
 #include "main.h"
 
 class PID {
-    public:
-        // Constructor
-        PID() {
-        };
-        
+    public:        
         PID(float* Input, float* Output, float* Setpoint, float* terms) {
             previous_error = 0.0;
             integral = 0.0;

@@ -2,7 +2,7 @@
 
 class PID {
     public:
-        PID();
+        PID() { }
         void Compute();
         void IntegralReset();
 
@@ -17,4 +17,5 @@ class PID {
         float previous_error;
         float integral;
         unsigned long last_time;
+        
 };
