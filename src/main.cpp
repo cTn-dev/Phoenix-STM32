@@ -1,7 +1,7 @@
 extern "C" {
     #include "main.h"
-}
-#include "pid.h"    
+    #include "pid.h" 
+}   
 
 static void _putc(void *p, char c) {
     uartWrite(c);
