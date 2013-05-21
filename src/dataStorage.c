@@ -36,7 +36,7 @@ union CONFIG_union {
     uint8_t raw[sizeof(struct CONFIG_struct)];
 } CONFIG;
 
-void initializeEEPROM(void) {
+void initializeEEPROM() {
     // Default settings should be initialized here
     CONFIG.data.version = EEPROM_VERSION;
     CONFIG.data.calibrateESC = 0;
@@ -116,8 +116,9 @@ void initializeEEPROM(void) {
     // writeEEPROM() needs to be called manually to store this data in EEPROM
 }
 
-void writeEEPROM(void) {
+void writeEEPROM() {
 }
 
-void readEEPROM(void) {
+void readEEPROM() {
+    initializeEEPROM();
 }

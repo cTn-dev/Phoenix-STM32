@@ -2,7 +2,8 @@
 
 class PID {
     public:
-        PID() { }
+        PID() { };
+        PID(float* Input, float* Output, float* Setpoint, float* terms) { };
         void Compute();
         void IntegralReset();
 
@@ -17,5 +18,4 @@ class PID {
         float previous_error;
         float integral;
         unsigned long last_time;
-        
 };

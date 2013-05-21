@@ -1,6 +1,10 @@
 extern "C" {
     #include "main.h"
-    #include "pid.h" 
+    #include "phoenix.h"
+    #include "sensors.h"
+    #include "pid.h"
+    #include "dataStorage.h"
+    #include "sensor_mpu6050.h"
 }   
 
 static void _putc(void *p, char c) {
@@ -37,12 +41,34 @@ PID yaw_motor_pid;
 PID pitch_motor_pid;
 PID roll_motor_pid;
 
+void reset_PID_integrals() {
+    yaw_command_pid.IntegralReset();
+    pitch_command_pid.IntegralReset();
+    roll_command_pid.IntegralReset();
+    
+    yaw_motor_pid.IntegralReset();
+    pitch_motor_pid.IntegralReset();
+    roll_motor_pid.IntegralReset();      
+}
+
 int main(void) {
     systemInit();
     init_printf(NULL, _putc);
     uartInit(115200);
     delay(100);
     checkReflash(); // emergency reflash
+    
+    // Read data from EEPROM to CONFIG union
+    readEEPROM();
+
+    // Initialize PID objects with data from EEPROM
+    yaw_command_pid = PID(&headingError, &YawCommandPIDSpeed, &headingSetpoint, (float*) &CONFIG.data.PID_YAW_c);
+    pitch_command_pid = PID(&kinematicsAngle[YAXIS], &PitchCommandPIDSpeed, &commandPitch, (float*) &CONFIG.data.PID_PITCH_c);
+    roll_command_pid = PID(&kinematicsAngle[XAXIS], &RollCommandPIDSpeed, &commandRoll, (float*) &CONFIG.data.PID_ROLL_c);
+    
+    yaw_motor_pid = PID(&gyro[ZAXIS], &YawMotorSpeed, &YawCommandPIDSpeed, (float*) &CONFIG.data.PID_YAW_m);
+    pitch_motor_pid = PID(&gyro[YAXIS], &PitchMotorSpeed, &PitchCommandPIDSpeed, (float*) &CONFIG.data.PID_PITCH_m);
+    roll_motor_pid = PID(&gyro[XAXIS], &RollMotorSpeed, &RollCommandPIDSpeed, (float*) &CONFIG.data.PID_ROLL_m);  
     
     uint8_t leds = 7;
 

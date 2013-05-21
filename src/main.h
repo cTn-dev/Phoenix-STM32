@@ -45,6 +45,8 @@
 #define LEDR_ON   digitalHi(LEDR_GPIO,LEDR_PIN)
 #define LEDR_OFF  digitalLo(LEDR_GPIO,LEDR_PIN)
 
+// Phoenix stuff begin
+
 // Flight modes
 #define RATE_MODE 0
 #define ATTITUDE_MODE 1
@@ -65,6 +67,26 @@
 #define XAXIS 0
 #define YAXIS 1
 #define ZAXIS 2
+
+// Arbitrary ON/OFF definitions
+#define OFF 0
+#define ON 1
+
+// Modulo definitions (integer remainder)
+#define TASK_50HZ 2
+#define TASK_10HZ 10
+#define TASK_1HZ 100
+
+// +- PI normalization macro
+#define NORMALIZE(x) do { if ((x) < -PI) (x) += 2 * PI; else if ((x) > PI) (x) -= 2 * PI; } while (0);
+
+#define GYROSCOPE_DETECTED      0x01
+#define ACCELEROMETER_DETECTED  0x02
+#define MAGNETOMETER_DETECTED   0x04
+#define BAROMETER_DETECTED      0x08
+#define GPS_DETECTED            0x10
+
+// Phoenix stuff end
 
 #include "drv_system.h" // timers, delays, etc
 #include "drv_i2c.h"
