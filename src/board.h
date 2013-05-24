@@ -58,6 +58,10 @@
 #define LEDR_ON   digitalHi(LEDR_GPIO,LEDR_PIN)
 #define LEDR_OFF  digitalLo(LEDR_GPIO,LEDR_PIN)
 
+// Flight modes
+#define RATE_MODE 0
+#define ATTITUDE_MODE 1
+
 // Axis definitions
 #define XAXIS 0
 #define YAXIS 1

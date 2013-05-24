@@ -3,6 +3,7 @@ extern "C" {
 }
 
 #include "main.h"
+#include "pid.h"
 #include "dataStorage.h"
 #include "serialCommunication.h"
 #include "sensors.h"
@@ -34,6 +35,26 @@ void checkReflash() {
     LEDG_OFF;
 }
 
+// Global PID object definitions
+PID yaw_command_pid;
+PID pitch_command_pid;
+PID roll_command_pid;
+
+PID yaw_motor_pid;
+PID pitch_motor_pid;
+PID roll_motor_pid;
+
+// Function to reset I terms inside PID objects
+void reset_PID_integrals() {
+    yaw_command_pid.IntegralReset();
+    pitch_command_pid.IntegralReset();
+    roll_command_pid.IntegralReset();
+    
+    yaw_motor_pid.IntegralReset();
+    pitch_motor_pid.IntegralReset();
+    roll_motor_pid.IntegralReset();    
+}
+
 int main(void) {
     systemInit();
     init_printf(NULL, _putc);
@@ -45,6 +66,15 @@ int main(void) {
     // Read data from EEPROM to CONFIG union
     readEEPROM();
 
+    // Initialize PID objects with data from EEPROM
+    yaw_command_pid = PID(&headingError, &YawCommandPIDSpeed, &headingSetpoint, (float*) &CONFIG.data.PID_YAW_c);
+    pitch_command_pid = PID(&kinematicsAngle[YAXIS], &PitchCommandPIDSpeed, &commandPitch, (float*) &CONFIG.data.PID_PITCH_c);
+    roll_command_pid = PID(&kinematicsAngle[XAXIS], &RollCommandPIDSpeed, &commandRoll, (float*) &CONFIG.data.PID_ROLL_c);
+    
+    yaw_motor_pid = PID(&gyro[ZAXIS], &YawMotorSpeed, &YawCommandPIDSpeed, (float*) &CONFIG.data.PID_YAW_m);
+    pitch_motor_pid = PID(&gyro[YAXIS], &PitchMotorSpeed, &PitchCommandPIDSpeed, (float*) &CONFIG.data.PID_PITCH_m);
+    roll_motor_pid = PID(&gyro[XAXIS], &RollMotorSpeed, &RollCommandPIDSpeed, (float*) &CONFIG.data.PID_ROLL_m);      
+    
     // Initialize motors/receivers/sensors
     sensors.initializeGyro();
     sensors.initializeAccel();    
@@ -102,6 +132,38 @@ void process100HzTask() {
     
     // Update kinematics with latest data
     kinematics_update(gyro[XAXIS], gyro[YAXIS], gyro[ZAXIS], accel[XAXIS], accel[YAXIS], accel[ZAXIS]);    
+    
+    // Update heading
+    headingError = kinematicsAngle[ZAXIS] - commandYawAttitude;
+    NORMALIZE(headingError); // +- PI
+    
+    // Update PIDs according the selected mode
+    if (flightMode == ATTITUDE_MODE) {
+        // Compute command PIDs (with kinematics correction)
+        yaw_command_pid.Compute();
+        pitch_command_pid.Compute();
+        roll_command_pid.Compute();
+    } else if (flightMode == RATE_MODE) {
+        // Stick input, * 4.0 is the rotation speed factor
+        YawCommandPIDSpeed = commandYaw * 4.0;
+        PitchCommandPIDSpeed = commandPitch * 4.0;
+        RollCommandPIDSpeed = commandRoll * 4.0;        
+    }   
+    
+    // Compute motor PIDs (rate-based)    
+    yaw_motor_pid.Compute();
+    pitch_motor_pid.Compute();
+    roll_motor_pid.Compute();  
+
+    // This is the place where the actual "force" gets applied
+    if (armed) {
+        // TODO
+        
+        /*
+        updateMotorsMix(); // Frame specific motor mix
+        updateMotors(); // Update ESCs
+        */
+    }     
 }
 
 void process50HzTask() {
