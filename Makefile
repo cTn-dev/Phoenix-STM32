@@ -39,6 +39,7 @@ COMMON_SRC   = startup_stm32f10x_md_gcc.S \
     serialCommunication.cpp \
     sensors.cpp \
     sensor_mpu6050.cpp \
+    kinematics.cpp \
     $(CMSIS_SRC) \
     $(STDPERIPH_SRC)
 

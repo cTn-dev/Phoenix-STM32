@@ -16,6 +16,7 @@ extern "C" {
 #include "serialCommunication.h"
 #include "sensors.h"
 #include "sensor_mpu6050.h"
+#include "kinematics.h"
 
 Configurator::Configurator() {
     state = 0;
@@ -119,12 +120,11 @@ void Configurator::process_data() {
             */
             break;
         case PSP_REQ_KINEMATICS:
-            /*
             protocol_head(PSP_REQ_KINEMATICS, 12);
 
             for (uint8_t axis = 0; axis <= ZAXIS; axis++) {
                 serialize_float32(kinematicsAngle[axis]);
-            }*/
+            }
             break;
         case PSP_REQ_MOTORS_OUTPUT:
             /*
@@ -181,7 +181,6 @@ void Configurator::process_data() {
             send_UNION();                    
             break;
         case PSP_SET_ACCEL_CALIBRATION:
-            /*
             sensors.calibrateAccel();
             
             // Write config to EEPROM
@@ -193,7 +192,6 @@ void Configurator::process_data() {
             for (uint8_t axis = 0; axis <= ZAXIS; axis++) {
                 serialize_uint16(CONFIG.data.ACCEL_BIAS[axis]);
             }
-            */
             break; 
         case PSP_SET_MOTOR_TEST_VALUE:
             /*

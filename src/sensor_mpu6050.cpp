@@ -137,8 +137,8 @@ void MPU6050::readGyroRaw() {
     
     i2cRead(MPU6050_ADDRESS, MPUREG_GYRO_XOUT_H, 6, buf);
     
-    gyroRaw[YAXIS] = (buf[0] << 8) | buf[1];
-    gyroRaw[XAXIS] = (buf[2] << 8) | buf[3];
+    gyroRaw[XAXIS] = (buf[0] << 8) | buf[1];
+    gyroRaw[YAXIS] = -((buf[2] << 8) | buf[3]);
     gyroRaw[ZAXIS] = (buf[4] << 8) | buf[5];
 }
 
@@ -147,8 +147,8 @@ void MPU6050::readAccelRaw() {
     
     i2cRead(MPU6050_ADDRESS, MPUREG_ACCEL_XOUT_H, 6, buf);
     
-    accelRaw[YAXIS] = -((buf[0] << 8) | buf[1]);
-    accelRaw[XAXIS] = (buf[2] << 8) | buf[3]; 
+    accelRaw[XAXIS] = (buf[0] << 8) | buf[1];
+    accelRaw[YAXIS] = (buf[2] << 8) | buf[3]; 
     accelRaw[ZAXIS] = (buf[4] << 8) | buf[5];
 }
 

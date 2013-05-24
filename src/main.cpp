@@ -6,6 +6,8 @@ extern "C" {
 #include "dataStorage.h"
 #include "serialCommunication.h"
 #include "sensors.h"
+#include "sensor_mpu6050.h"
+#include "kinematics.h"
 
 static void _putc(void *p, char c) {
     uartWrite(c);
@@ -97,6 +99,9 @@ void process100HzTask() {
     
     // Listens / read Serial commands on Serial1 interface (used to pass data from configurator)
     readSerial();
+    
+    // Update kinematics with latest data
+    kinematics_update(gyro[XAXIS], gyro[YAXIS], gyro[ZAXIS], accel[XAXIS], accel[YAXIS], accel[ZAXIS]);    
 }
 
 void process50HzTask() {

@@ -32,6 +32,9 @@
 #define abs(x) ((x) > 0 ? (x) : -(x))
 #define constrain(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 
+// +- PI normalization macro
+#define NORMALIZE(x) do { if ((x) < -PI) (x) += 2 * PI; else if ((x) > PI) (x) -= 2 * PI; } while (0);
+
 #define radians(deg) ((deg)*DEG_TO_RAD)
 #define lowByte(w) ((uint8_t) ((w) & 0xff))
 #define highByte(w) ((uint8_t) ((w) >> 8))
