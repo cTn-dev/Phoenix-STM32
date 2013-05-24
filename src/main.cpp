@@ -4,7 +4,8 @@ extern "C" {
 
 #include "main.h"
 #include "dataStorage.h"
-#include "SerialCommunication.h"
+#include "serialCommunication.h"
+#include "sensors.h"
 
 static void _putc(void *p, char c) {
     uartWrite(c);
@@ -31,21 +32,21 @@ void checkReflash() {
     LEDG_OFF;
 }
 
-// Modulo definitions (integer remainder)
-#define TASK_50HZ 2
-#define TASK_10HZ 10
-#define TASK_1HZ 100
-
 int main(void) {
     systemInit();
     init_printf(NULL, _putc);
     uartInit(115200);
     delay(100);
     checkReflash(); // emergency reflash
+    i2cInit(I2C2);
     
     // Read data from EEPROM to CONFIG union
     readEEPROM();
 
+    // Initialize motors/receivers/sensors
+    sensors.initializeGyro();
+    sensors.initializeAccel();    
+    
     // main loop
     while (1) {
         // Timer
@@ -53,7 +54,8 @@ int main(void) {
 
         // Read data (not faster then every 1 ms)
         if (currentTime - sensorPreviousTime >= 1000) {
-            // read stuff goes here
+            sensors.readGyroSum();
+            sensors.readAccelSum();     
             
             sensorPreviousTime = currentTime;
         }
@@ -90,7 +92,10 @@ int main(void) {
 }
 
 void process100HzTask() {
-    // Listens/read Serial commands on Serial1 interface (used to pass data from configurator)
+    sensors.evaluateGyro();
+    sensors.evaluateAccel();
+    
+    // Listens / read Serial commands on Serial1 interface (used to pass data from configurator)
     readSerial();
 }
 
@@ -113,16 +118,6 @@ void process50HzTask() {
 }
 
 void process10HzTask() {
-    /*
-    while (uartAvailable()) {
-        uint8_t c = uartRead();
-        printf("Got (%c)\r\n", c);
-        
-        if (c == 'R') {
-            systemReset(true); // reboot to bootloader
-        }
-    }
-    */
 }
 
 void process1HzTask() {

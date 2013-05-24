@@ -1,5 +1,10 @@
 #pragma once
 
+// Modulo definitions (integer remainder)
+#define TASK_50HZ 2
+#define TASK_10HZ 10
+#define TASK_1HZ 100
+
 // Main loop variables
 unsigned long currentTime = 0;
 unsigned long previousTime = 0;

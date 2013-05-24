@@ -13,7 +13,9 @@ extern "C" {
 }
 
 #include "dataStorage.h"
-#include "SerialCommunication.h"
+#include "serialCommunication.h"
+#include "sensors.h"
+#include "sensor_mpu6050.h"
 
 Configurator::Configurator() {
     state = 0;
@@ -90,7 +92,7 @@ void Configurator::process_data() {
         case PSP_REQ_CONFIGURATION:
             send_UNION();
             break;              
-        case PSP_REQ_GYRO_ACC: /* {
+        case PSP_REQ_GYRO_ACC: {
             protocol_head(PSP_REQ_GYRO_ACC, 24);
             
             // gyro
@@ -106,7 +108,6 @@ void Configurator::process_data() {
             } 
             
             }
-            */
             break;                  
         case PSP_REQ_RC:
             /*
@@ -141,11 +142,9 @@ void Configurator::process_data() {
             serialize_uint8(4); // temporary
             break;
         case PSP_REQ_SENSORS_ALIVE:
-            /*
             protocol_head(PSP_REQ_SENSORS_ALIVE, 2);
             
             serialize_uint16(sensors.sensors_detected);
-            */
             break;
         case PSP_REQ_AUX_TRIGGERED:
             /*
