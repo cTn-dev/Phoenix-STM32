@@ -89,7 +89,6 @@ int main(void) {
     uartInit(115200);
     delay(100);
     checkReflash(); // emergency reflash
-    i2cInit(I2C2);
     
     // Read data from EEPROM to CONFIG union
     readEEPROM();
