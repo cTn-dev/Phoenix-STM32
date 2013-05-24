@@ -16,3 +16,6 @@ extern volatile uint16_t PPM_error;
 extern volatile uint8_t RX_signalReceived;
 
 extern bool failsafeEnabled;
+
+void initializeReceiver();
+void RX_failSafe();

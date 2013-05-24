@@ -9,6 +9,8 @@ extern "C" {
 #include "sensors.h"
 #include "sensor_mpu6050.h"
 #include "kinematics.h"
+#include "receiver.h"
+#include "pilotCommandProcessor.h"
 #include "frame_type.h"
 #include "esc.h"
 
@@ -189,6 +191,9 @@ void process100HzTask() {
 }
 
 void process50HzTask() {
+    processPilotCommands();
+    
+    // temp
     static uint8_t leds = 7;
     
     if (leds&8) {
@@ -207,6 +212,8 @@ void process50HzTask() {
 }
 
 void process10HzTask() {
+    // Trigger RX failsafe function every 100ms
+    RX_failSafe();
 }
 
 void process1HzTask() {

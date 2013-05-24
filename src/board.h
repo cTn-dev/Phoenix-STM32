@@ -73,6 +73,12 @@
 #define D  2 // Derivative
 #define WG 3 // WindupGuard
 
+// Primary channel definitions
+#define ROLL        0
+#define PITCH       1
+#define THROTTLE    2
+#define YAW         3
+
 #define GYROSCOPE_DETECTED      0x01
 #define ACCELEROMETER_DETECTED  0x02
 #define MAGNETOMETER_DETECTED   0x04
