@@ -1,4 +1,4 @@
-#include "main.h"
+#include "board.h"
 
 // I2C2
 // SCL  PB10

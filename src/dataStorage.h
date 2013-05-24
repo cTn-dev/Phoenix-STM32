@@ -1,5 +1,7 @@
 #pragma once
 
+#define EEPROM_VERSION 4
+
 struct __attribute__((packed)) CONFIG_struct {
     uint8_t version;
     bool calibrateESC;
@@ -9,8 +11,8 @@ struct __attribute__((packed)) CONFIG_struct {
     int16_t ACCEL_BIAS[3];    
     
     // RX
-    uint8_t CHANNEL_ASSIGNMENT[8];
-    uint16_t CHANNEL_FUNCTIONS[4];
+    uint8_t CHANNEL_ASSIGNMENT[16];
+    uint64_t CHANNEL_FUNCTIONS[4];
     
     // Attitude
     float PID_YAW_c[4];
@@ -29,7 +31,7 @@ struct __attribute__((packed)) CONFIG_struct {
     float PID_GPS[4];
 };
 
-union CONFIG_union {
+extern union CONFIG_union {
     struct CONFIG_struct data;
     uint8_t raw[sizeof(struct CONFIG_struct)];
 } CONFIG;

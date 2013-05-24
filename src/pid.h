@@ -2,8 +2,8 @@
 
 class PID {
     public:
-        PID() { };
-        PID(float* Input, float* Output, float* Setpoint, float* terms) { };
+        PID();
+        PID(float* Input, float* Output, float* Setpoint, float* terms);
         void Compute();
         void IntegralReset();
 

@@ -16,7 +16,7 @@
 */
 
 #include "main.h"
-
+/*
 class PID {
     public:        
         PID(float* Input, float* Output, float* Setpoint, float* terms) {
@@ -63,3 +63,4 @@ class PID {
         float integral;
         unsigned long last_time;
 };
+*/
