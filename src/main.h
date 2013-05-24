@@ -6,27 +6,32 @@
 #define TASK_1HZ 100
 
 // Main loop variables
-unsigned long currentTime = 0;
-unsigned long previousTime = 0;
-unsigned long sensorPreviousTime = 0;
-uint8_t frameCounter = 0;
+extern unsigned long currentTime;
+extern unsigned long previousTime;
+extern unsigned long sensorPreviousTime;
+extern uint8_t frameCounter;
 
-bool armed = false;
-bool flightMode = false;
+extern bool armed;
+extern bool flightMode;
+extern bool altitudeHoldBaro;
+extern bool altitudeHoldSonar;
+extern bool positionHoldGPS;
 
 // FlightController commands definitions
-float commandYaw, commandYawAttitude, commandPitch, commandRoll, commandThrottle;
+extern float commandYaw, commandYawAttitude, commandPitch, commandRoll, commandThrottle;
 
 // Heading related variables
-float headingError = 0.0;
-float headingSetpoint = 0.0;
+extern float headingError;
+extern float headingSetpoint;
 
 // PID variables
-float YawCommandPIDSpeed, PitchCommandPIDSpeed, RollCommandPIDSpeed;
-float YawMotorSpeed, PitchMotorSpeed, RollMotorSpeed, AltitudeHoldMotorSpeed;
-int16_t throttle = 1000;
+extern float YawCommandPIDSpeed, PitchCommandPIDSpeed, RollCommandPIDSpeed;
+extern float YawMotorSpeed, PitchMotorSpeed, RollMotorSpeed, AltitudeHoldMotorSpeed;
+extern int16_t throttle;
 
 void process100HzTask();
 void process50HzTask();
 void process10HzTask();
 void process1HzTask();
+
+void reset_PID_integrals();

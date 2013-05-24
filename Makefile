@@ -41,6 +41,10 @@ COMMON_SRC   = startup_stm32f10x_md_gcc.S \
     sensors.cpp \
     sensor_mpu6050.cpp \
     kinematics.cpp \
+    receiver.cpp \
+    pilotCommandProcessor.cpp \
+    frame_type.cpp \
+    esc.cpp \
     $(CMSIS_SRC) \
     $(STDPERIPH_SRC)
 

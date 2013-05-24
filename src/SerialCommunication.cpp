@@ -17,6 +17,10 @@ extern "C" {
 #include "sensors.h"
 #include "sensor_mpu6050.h"
 #include "kinematics.h"
+#include "receiver.h"
+#include "frame_type.h"
+#include "pilotCommandProcessor.h"
+#include "esc.h"
 
 Configurator::Configurator() {
     state = 0;
@@ -111,13 +115,11 @@ void Configurator::process_data() {
             }
             break;                  
         case PSP_REQ_RC:
-            /*
             protocol_head(PSP_REQ_RC, RX_CHANNELS * 2);
             
             for (uint8_t channel = 0; channel < RX_CHANNELS; channel++) {
                 serialize_uint16(RX[channel]);
             }
-            */
             break;
         case PSP_REQ_KINEMATICS:
             protocol_head(PSP_REQ_KINEMATICS, 12);
@@ -127,19 +129,16 @@ void Configurator::process_data() {
             }
             break;
         case PSP_REQ_MOTORS_OUTPUT:
-            /*
             protocol_head(PSP_REQ_MOTORS_OUTPUT, MOTORS * 2);
 
             for (uint8_t motor = 0; motor < MOTORS; motor++) {
                 serialize_uint16(MotorOut[motor]);
             }
-            */
             break;
         case PSP_REQ_MOTORS_COUNT:
             protocol_head(PSP_REQ_MOTORS_COUNT, 1);
             
-            //serialize_uint8(MOTORS);
-            serialize_uint8(4); // temporary
+            serialize_uint8(MOTORS);
             break;
         case PSP_REQ_SENSORS_ALIVE:
             protocol_head(PSP_REQ_SENSORS_ALIVE, 2);
@@ -147,11 +146,9 @@ void Configurator::process_data() {
             serialize_uint16(sensors.sensors_detected);
             break;
         case PSP_REQ_AUX_TRIGGERED:
-            /*
             protocol_head(PSP_REQ_AUX_TRIGGERED, 8);
             
             serialize_uint64(AUX_chan_mask);
-            */
             break;
          
         // SET
@@ -194,7 +191,6 @@ void Configurator::process_data() {
             }
             break; 
         case PSP_SET_MOTOR_TEST_VALUE:
-            /*
             // data_buffer should contain 2 bytes (byte 0 = motor number, byte 1 = value)
             if (data_buffer[0] < MOTORS) { // Check if motor number is within our setup
                 MotorOut[data_buffer[0]] = 1000 + (data_buffer[1] * 10);
@@ -202,7 +198,6 @@ void Configurator::process_data() {
             } else { // Motor number is not in our setup
                 REFUSED();
             }
-            */
             break;
         case PSP_SET_REBOOT:
             // In the future we might also utilize the true flag an allow a standard reboot.
