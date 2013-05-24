@@ -9,6 +9,8 @@ extern "C" {
 #include "sensors.h"
 #include "sensor_mpu6050.h"
 #include "kinematics.h"
+#include "frame_type.h"
+#include "esc.h"
 
 static void _putc(void *p, char c) {
     uartWrite(c);
@@ -181,12 +183,8 @@ void process100HzTask() {
 
     // This is the place where the actual "force" gets applied
     if (armed) {
-        // TODO
-        
-        /*
         updateMotorsMix(); // Frame specific motor mix
         updateMotors(); // Update ESCs
-        */
     }     
 }
 
